@@ -1,0 +1,40 @@
+
+class Trie:
+
+   def __init__(self,st):
+       self.child = []
+       self.terminate  = None
+       self.st = st
+
+
+
+count = 1
+def insert(s,head):
+    global count
+    cur_node = head
+
+    for i in s:
+        flag =  0
+        for j in cur_node.child:
+            # print(i,j.st)
+            if j.st == i:
+
+                cur_node = j
+                flag = 1
+                break
+        if not flag:
+            z = Trie(i)
+            cur_node.child.append(z)
+            count+=1
+            cur_node = z
+
+    cur_node.terminate = True
+
+
+n = int(input())
+head = Trie('0')
+
+for i in range(n):
+    insert(input(),head)
+
+print(count)
