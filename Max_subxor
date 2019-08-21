@@ -1,0 +1,70 @@
+class Trie():
+
+    def __init__(self,value):
+
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+
+def insert(n,head):
+
+    cur_node = head
+
+    for i in range(31,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            if cur_node.left == None:
+                cur_node.left = Trie(z)
+            cur_node = cur_node.left
+        else:
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+            cur_node = cur_node.right
+
+def maxi(n,head):
+
+    cur_node = head
+    cur_xor = 0
+    for i in range(31,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+
+            if cur_node.right!=None:
+                cur_node = cur_node.right
+                cur_xor+=pow(2,i)
+            else:
+
+                cur_node = cur_node.left
+        if z == 1:
+            if cur_node.left!=None:
+                cur_node = cur_node.left
+                cur_xor+=pow(2,i)
+            else:
+
+               cur_node = cur_node.right
+
+
+
+    return cur_xor
+
+
+
+head = Trie(0)
+
+
+n,k = map(int,input().split())
+
+l = list(map(int,input().split()))
+
+maxo = 0
+xor = 0
+for i in l:
+    xor^=i
+    insert(xor,head)
+    maxo = max(maxo,maxi(xor,head))
+print(maxo)
+
+
+
