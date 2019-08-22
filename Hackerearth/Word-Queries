@@ -1,0 +1,90 @@
+
+from collections import defaultdict
+class Trie:
+
+    def __init__(self,st):
+        self.child = []
+        self.terminate  = False
+        self.st = st
+        self.val = 0
+
+def counti(cur_node):
+    ans = 0
+    if cur_node.child == []:
+        return 0
+
+
+
+
+
+    for i in cur_node.child:
+      if i.terminate == True:
+
+        ans += i.val+counti(i)
+      else:
+          ans += counti(i)
+
+    return ans
+
+
+
+
+def insert(s,head,val):
+
+    cur_node = head
+
+    for i in s:
+        flag =  0
+        for j in cur_node.child:
+            # print(i,j.st)
+            if j.st == i:
+
+                cur_node = j
+                flag = 1
+                break
+        if not flag:
+            z = Trie(i)
+            cur_node.child.append(z)
+
+            cur_node = z
+
+    cur_node.terminate = True
+    cur_node.val = val
+
+
+def query(s,head):
+    cur_node = head
+
+    for i in s:
+        flag = 0
+        for j in cur_node.child:
+            if j.st == i:
+                cur_node = j
+                flag = 1
+                break
+        if not flag:
+            return 0
+
+    count = cur_node.val if cur_node.terminate == True else 0
+
+    count+=counti(cur_node)
+
+    return count
+
+
+hash = defaultdict(int)
+
+
+head = Trie('0')
+n,q = map(int,input().split())
+for i in range(n):
+    hash[input()]+=1
+
+for i in hash:
+    insert(i,head,hash[i])
+
+for i in range(q):
+    print(query(input(),head))
+
+
+
