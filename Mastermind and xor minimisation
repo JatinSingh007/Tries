@@ -1,0 +1,138 @@
+from collections import defaultdict
+
+
+
+
+def distinct_sum(l):
+    sumi = sum(l)
+    yo = defaultdict(int)
+    dp = []
+    for i in range(len(l)+1):
+        k = [False]*(sumi+1)
+        dp.append(k)
+    n = len(l)
+    for i in range(n+1):
+        dp[i][0] = True
+
+    for i in range(1,n+1):
+        dp[i][l[i-1]] = True
+        yo[l[i-1]]+=1
+
+        for j in range(1,sumi+1):
+          if dp[i-1][j] == True:
+            dp[i][j] = True
+            dp[i][j+l[i-1]] = True
+            yo[j+l[i-1]]+=1
+
+
+    # for i in range(n+1):
+    #     for j in range(1,sumi+1):
+    #         if dp[i][j] == True:
+    #             yo[j]+=1
+    # print(dp)
+
+    return yo
+
+
+
+class Trie():
+
+    def __init__(self,value):
+
+        self.value = value
+        self.left = None
+        self.right = None
+        self.val = 0
+
+
+
+def insert(n,head):
+
+    cur_node = head
+
+    for i in range(17,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            if cur_node.left == None:
+                cur_node.left = Trie(z)
+            cur_node = cur_node.left
+        else:
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+            cur_node = cur_node.right
+
+    cur_node.val = n
+
+def mini(n,head):
+
+    cur_node = head
+
+    for i in range(17,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+
+            if cur_node.left!=None:
+                cur_node = cur_node.left
+
+
+            else:
+
+                cur_node = cur_node.right
+
+                # cur_xor+=pow(2,i)
+        if z == 1:
+            if cur_node.right!=None:
+                cur_node = cur_node.right
+
+
+            else:
+
+                cur_node = cur_node.left
+
+                # cur_xor+=pow(2,i)
+
+
+
+    return cur_node.val
+
+
+
+head = Trie(0)
+
+
+
+n = int(input())
+
+l = list(map(int,input().split()))
+z = sum(l)
+dp = [1] + [0] * z
+
+for a in l:
+    for ps in range(z, -1, -1):
+        if dp[ps]:
+            dp[a + ps] = (dp[a + ps] + dp[ps]) % 1000000007
+
+
+# print(dp)
+# for i, c in enumerate(dp[1:]):
+#     if c:
+#         insert(c,head)
+
+for i, c in enumerate(dp[1:]):
+    if c:
+        insert(i+1,head)
+m = 10**9 + 7
+q = int(input())
+import sys
+for qs in sys.stdin:
+    a = int(qs)
+    z = mini(a,head)
+    print(z,dp[z]%m)
+
+
+
+
+
+
+
+
