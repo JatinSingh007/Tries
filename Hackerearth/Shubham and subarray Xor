@@ -1,0 +1,84 @@
+
+class Trie():
+
+    def __init__(self,value):
+
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+
+def insert(n,head):
+
+    cur_node = head
+
+    for i in range(15,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            if cur_node.left == None:
+                cur_node.left = Trie(z)
+            cur_node = cur_node.left
+        else:
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+            cur_node = cur_node.right
+
+def maxi(n,head):
+
+    cur_node = head
+    cur_xor = 0
+    for i in range(15,-1,-1):
+        z = (n>>i)&1
+        if cur_node == None:
+            break
+        if z == 0:
+
+            if cur_node.right!=None:
+                cur_node = cur_node.right
+                cur_xor+=pow(2,i)
+            else:
+
+                cur_node = cur_node.left
+        if z == 1:
+            if cur_node.left!=None:
+                cur_node = cur_node.left
+                cur_xor+=pow(2,i)
+            else:
+
+                cur_node = cur_node.right
+
+
+
+    return cur_xor
+head = Trie(0)
+
+n = int(input())
+
+
+l = list(map(int,input().split()))
+
+
+pref = [0]
+
+for i in range(n):
+    pref.append(pref[-1]+l[i])
+
+maxii = -10
+for i in range(n-1,-1,-1):
+
+    for j in range(i,-1,-1):
+
+        k1 = i+1
+        k2 = j+1
+        sumi =  pref[k1]-pref[k2-1]
+        z = maxi(sumi,head)
+        maxii = max(maxii,z)
+
+    for j in range(i,n):
+        k1 = i+1
+        k2 = j+1
+        sumi =  pref[k2]-pref[k1-1]
+        insert(sumi,head)
+
+print(maxii)
