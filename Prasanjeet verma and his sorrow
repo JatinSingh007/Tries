@@ -1,0 +1,27 @@
+word_dic = {}
+found =[]
+for i in range(int(input())):
+ 
+    s = ''
+    command = input().split()
+    if command[0] == 'add':
+        for i in command[1]:
+            s = s + i
+            if s in word_dic:
+                word_dic[s] = word_dic[s] + 1
+            else:
+                word_dic[s] = 1
+ 
+ 
+ 
+    else:
+        if command[1] in word_dic:
+            found.append(word_dic[command[1]])
+ 
+        else:
+            found.append(0)
+ 
+for i in found:
+    print(i)
+ 
+ 
