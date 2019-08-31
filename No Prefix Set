@@ -1,0 +1,44 @@
+
+from collections import defaultdict
+
+
+
+
+n = int(input())
+
+
+la = []
+hash = defaultdict(int)
+l = []
+hash1 = defaultdict(list)
+for i in range(n):
+    z = input()
+
+
+    l.append(z)
+
+
+hash_pre = defaultdict(list)
+seti = set()
+ans = []
+for jo,i in enumerate(l):
+    st = ''
+    for j in i:
+        st+=j
+        if st in seti:
+
+            ans.append([jo,i])
+
+        if i in hash_pre:
+
+            ans.append([jo,i])
+
+        hash_pre[st].append(i)
+    seti.add(i)
+ans.sort()
+
+if ans == []:
+        print('GOOD SET')
+else:
+        print('BAD SET')
+        print(ans[0][1])
