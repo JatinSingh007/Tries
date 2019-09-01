@@ -1,0 +1,192 @@
+from collections import defaultdict
+ 
+ 
+ 
+ 
+class Trie():
+ 
+    def __init__(self,value):
+ 
+        self.value = value
+        self.left = None
+        self.right = None
+        self.terminal = False
+        self.par = None
+        self.child = 0
+ 
+ 
+ 
+ 
+def insert(n,head):
+ 
+    cur_node = head
+ 
+    for i in range(31,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            if cur_node.left == None:
+ 
+                cur_node.left = Trie(z)
+                cur_node.left.par = cur_node
+                cur_node.child+=1
+ 
+            cur_node = cur_node.left
+        else:
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+                cur_node.right.par = cur_node
+                cur_node.child+=1
+            cur_node = cur_node.right
+ 
+    cur_node.terminal = True
+ 
+def maxi(n,head):
+ 
+    cur_node = head
+    cur_xor = 0
+    for i in range(31,-1,-1):
+        z = (n>>i)&1
+        if cur_node == None:
+            break
+        if z == 0:
+ 
+            if cur_node.right!=None:
+                cur_node = cur_node.right
+                cur_xor+=pow(2,i)
+            else:
+ 
+                cur_node = cur_node.left
+        if z == 1:
+            if cur_node.left!=None:
+                cur_node = cur_node.left
+                cur_xor+=pow(2,i)
+            else:
+ 
+                cur_node = cur_node.right
+ 
+ 
+ 
+    return cur_xor
+ 
+def delete(head,n):
+    cur_node = head
+ 
+    for i in range(31,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            if cur_node.left == None:
+                cur_node.left = Trie(z)
+            cur_node = cur_node.left
+        else:
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+            cur_node = cur_node.right
+ 
+    # print(cur_node.value)
+    z = cur_node.value
+    temp = cur_node.par
+    if cur_node.left!=None:
+        cur_node.left = None
+    if cur_node.right!=None:
+        cur_node.right = None
+    if z == 0:
+        if temp.left != None:
+            if temp.left.value == 0:
+                temp.left = None
+    elif z == 1:
+        if temp.right != None:
+            if temp.right.value == 1:
+                temp.right = None
+    del(cur_node)
+    cur_node = temp
+ 
+ 
+ 
+ 
+ 
+    while cur_node.par!=None:
+ 
+ 
+            if cur_node.child-1 == 0:
+                if cur_node.terminal == False:
+                    z = cur_node.value
+                    temp = cur_node.par
+                    if cur_node.left!=None:
+                        cur_node.left = None
+                    if cur_node.right!=None:
+                        cur_node.right = None
+ 
+                    if z == 0:
+                        if temp.left != None:
+                            if temp.left.value == 0:
+                                temp.left = None
+                    elif z == 1:
+                        if temp.right != None:
+                            if temp.right.value == 1:
+                                temp.right = None
+ 
+ 
+                    del(cur_node)
+ 
+                    cur_node = temp
+                    if cur_node == head:
+ 
+ 
+                         cur_node.child-=1
+                         break
+ 
+ 
+ 
+ 
+                else:
+ 
+                    break
+            else:
+ 
+                cur_node.child-=1
+                break
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+hash = defaultdict(int)
+ 
+head = Trie('y')
+head.par = None
+ 
+ 
+ 
+insert(0,head)
+ 
+ans = []
+q = int(input())
+ 
+for i in range(q):
+ 
+    a,b = map(str,input().split())
+    b = int(b)
+ 
+    if a == '+':
+        hash[b]+=1
+        if hash[b] == 1:
+            insert(b,head)
+    if a == '-':
+        hash[b]-=1
+        if hash[b] == 0:
+ 
+            delete(head,b)
+ 
+    if a == '?':
+        ans.append(maxi(b,head))
+ 
+ 
+print(*ans)
+ 
+ 
+ 
