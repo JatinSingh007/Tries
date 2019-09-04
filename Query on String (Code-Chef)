@@ -1,0 +1,62 @@
+
+from collections import defaultdict
+
+
+hash = defaultdict(int)
+hash1 = defaultdict(set)
+la = []
+
+
+t = int(input())
+bool = [False]*(t+1)
+for _ in range(t):
+
+
+
+
+    d = list(map(str,input().split()))
+    la.append(d)
+
+    if d[0] == '1':
+        yo = ''
+
+        for i in d[1][::-1]:
+
+            yo+=i
+            c = yo[::-1]
+
+            hash[c]+=1
+            # print(yo)
+            hash1[len(c)].add(c)
+
+
+    elif d[0] == '2':
+
+       flag = 0
+       for i in hash1[int(d[2])]:
+
+           if hash[i] >= int(d[1]):
+               flag = 1
+               print('YES')
+               break
+       if not flag:
+           print('NO')
+
+    else:
+
+        s = la[int(d[1])-1][1]
+        # print(la)
+        # print(s)
+        yo = ''
+        if bool[int(d[1])] != False:
+            continue
+        for i in s[::-1] :
+            yo+=i
+            c = yo[::-1]
+            if hash[c]>0:
+             hash[c]-=1
+             if hash[c] == 0:
+                 del hash[c]
+                 hash1[len(c)].remove(c)
+        bool[int(d[1])] = True
+
