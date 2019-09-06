@@ -1,0 +1,41 @@
+from collections import defaultdict
+n,M = map(int,input().split())
+ 
+m = 99999999999999999999999983
+seti = set()
+ 
+for i in range(n):
+ 
+    s = input()
+    po = 1
+    h = 0
+    for i in s:
+        h,po = (h+ord(i)*po)%m,(po*203)%m
+ 
+    po = 1
+    for i in range(len(s)):
+        for j in range(97,100):
+            if ord(s[i])!=j:
+              z = (h%m - ord(s[i])%m*po%m + j%m*po%m)%m
+              seti.add(z%m)
+        po = (po*203)%m
+ 
+po = 1
+ans = []
+for i in range(M):
+ 
+    s = input()
+    po = 1
+    h = 0
+    for i in s:
+        h,po = (h+ord(i)*po)%m,(po*203)%m
+ 
+ 
+ 
+    if h in seti:
+        ans.append('YES')
+    else:
+       ans.append('NO')
+print('\n'.join(ans))
+ 
+ 
