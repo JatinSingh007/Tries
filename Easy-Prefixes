@@ -1,0 +1,36 @@
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from collections import defaultdict
+
+hash = defaultdict(list)
+
+hash_count = defaultdict(lambda : [0]*26)
+
+n,m = map(int,raw_input().split())
+
+for _ in range(n):
+
+    s = raw_input()
+    st = ''
+    for i in s:
+        st+=i
+        hash[st].append(s)
+        hash_count[s][ord(i)-97]+=1
+
+
+
+
+
+
+for _ in range(m):
+    a,b,c = map(str,raw_input().split())
+
+    if a == '1':
+        for i in hash[b]:
+            hash_count[i][ord(c)-97]+=1
+
+    elif a == '2':
+        for i in hash[b]:
+            hash_count[i][ord(c)-97]-=1
+    else:
+        print(hash_count[b][ord(c)-97])
+
