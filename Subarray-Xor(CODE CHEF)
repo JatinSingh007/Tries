@@ -1,0 +1,145 @@
+
+
+def brute_force(l,k):
+    coun = 0
+    for i in range(len(l)):
+
+        xor = 0
+        for j in range(i,len(l)):
+
+            xor = xor ^ l[j]
+
+            if xor<k:
+
+                coun+=1
+
+    return coun
+
+
+
+
+
+
+
+
+class Trie():
+
+    def __init__(self,val):
+
+        self.val = val
+        self.value = 0
+        self.left = None
+        self.right = None
+        self.par = None
+        self.left_count = 0
+        self.right_count = 0
+
+
+
+def insert(n,head):
+
+    cur_node = head
+
+    for i in range(22,-1,-1):
+        z = (n>>i)&1
+        if z == 0:
+            cur_node.left_count+=1
+            if cur_node.left == None:
+                cur_node.left = Trie(z)
+                cur_node.left.par = cur_node
+            cur_node = cur_node.left
+
+
+        else:
+            cur_node.right_count+=1
+            if cur_node.right == None:
+                cur_node.right = Trie(z)
+                cur_node.right.par = cur_node
+            cur_node = cur_node.right
+
+
+    # while cur_node!=head:
+    #     cur_node.value+=1
+    #     cur_node = cur_node.par
+
+
+def query(n,k,head):
+
+    ans = 0
+
+    cur_node = head
+    for i in range(22,-1,-1):
+        z1 = (n>>i)&1
+        z2 =  (k>>i)&1
+        if cur_node == None:
+            break
+        # yo+=z1<<i
+        if z2 == 1:
+            if z1 == 0:
+
+                # if cur_node.left!=None:
+                    # if n == 4:
+                    #     print('213',cur_node.right.value)
+                ans+=cur_node.left_count
+
+                cur_node = cur_node.right
+            else:
+                # if cur_node.right!=None:
+                    # if n == 4:
+                    #     print('213',cur_node.right.value)
+                ans+=cur_node.right_count
+
+                cur_node = cur_node.left
+
+        elif z2 == 0:
+            if z1 == 0:
+
+
+                cur_node = cur_node.left
+            else:
+
+
+
+                cur_node = cur_node.right
+
+
+
+    return ans
+
+
+
+
+
+
+
+
+t = int(input())
+
+
+for _ in range(t):
+
+    head = Trie(0)
+
+    insert(0,head)
+    n,k = map(int,input().split())
+    l = list(map(int,input().split()))
+    n = len(l)
+    xor = 0
+    count = 0
+    # insert(0,head)
+    for i in l:
+        xor = xor^i
+        c = query(xor,k,head)
+        count+=c
+        # print(c,xor)
+
+
+        insert(xor,head)
+
+    # c = query(xor,k,head)
+    # count+=c
+
+
+    # print(head.left.value)
+    # print(brute_force(l,k))
+    print(count)
